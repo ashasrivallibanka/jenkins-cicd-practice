@@ -1,0 +1,45 @@
+pipeline {
+
+    agent any
+
+    stages {
+
+        stage('Checkout Source Code') {
+
+            steps {
+
+                git branch: 'main',
+                    credentialsId: 'github-ssh',
+                    url: 'git@github.com:ashasrivallibanka/jenkins-cicd-practice.git'
+
+            }
+
+        }
+
+        stage('Build Docker Image') {
+
+            steps {
+
+                dir('project5-builddockerimage') {
+
+                    sh 'docker build -t jenkins-project5-demo .'
+
+                }
+
+            }
+
+        }
+
+        stage('Verify Docker Image') {
+
+            steps {
+
+                sh 'docker images | grep jenkins-project5-demo'
+
+            }
+
+        }
+
+    }
+
+}
